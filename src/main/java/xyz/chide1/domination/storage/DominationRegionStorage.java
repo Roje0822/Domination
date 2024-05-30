@@ -70,7 +70,6 @@ public class DominationRegionStorage {
         YamlConfiguration ymlFile = YamlConfiguration.loadConfiguration(file);
         String name = ymlFile.getString("name");
         Location center = ymlFile.getLocation("center");
-        System.out.println(center);
         Group group = Optional.ofNullable(ymlFile.getString("owner"))
                 .map(Group::valueOf)
                 .orElse(null);
