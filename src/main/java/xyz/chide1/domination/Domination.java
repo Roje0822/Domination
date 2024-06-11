@@ -1,9 +1,10 @@
 package xyz.chide1.domination;
 
 import lombok.Getter;
+import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.chide1.domination.command.DominationRegionCommand;
-import xyz.chide1.domination.listener.EnterDominationRegionListener;
+import xyz.chide1.domination.listener.*;
 import xyz.chide1.domination.storage.DominationRegionStorage;
 
 public class Domination extends JavaPlugin {
@@ -23,7 +24,11 @@ public class Domination extends JavaPlugin {
         getCommand("점령지역").setExecutor(new DominationRegionCommand());
 
         // Listener
-        getServer().getPluginManager().registerEvents(new EnterDominationRegionListener(), this);
+        getServer().getPluginManager().registerEvents(new AddBossBarListener(), this);
+        getServer().getPluginManager().registerEvents(new RemoveBossBarListener(), this);
+        getServer().getPluginManager().registerEvents(new StartDominationListener(), this);
+        getServer().getPluginManager().registerEvents(new CancelDominationListener(), this);
+        getServer().getPluginManager().registerEvents(new AdditionalExperienceListener(), this);
 
         // Config
         saveDefaultConfig();
@@ -35,5 +40,6 @@ public class Domination extends JavaPlugin {
     @Override
     public void onDisable() {
         DominationRegionStorage.getInstance().saveAll();
+        getServer().getBossBars().forEachRemaining(BossBar::removeAll);
     }
 }

@@ -2,18 +2,15 @@ package xyz.chide1.domination.storage;
 
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.chide1.domination.Domination;
 import xyz.chide1.domination.object.DominationRegion;
-import xyz.chide1.domination.object.Group;
+import xyz.chide1.domination.util.DominationRegionUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class DominationRegionStorage {
 
@@ -29,7 +26,11 @@ public class DominationRegionStorage {
 
     public void saveAll() {
         if (!REGION_DIRECTORY.exists()) REGION_DIRECTORY.mkdir();
+        if (dominationRegionMap == null) return;
         dominationRegionMap.keySet().forEach(this::save);
+        for (File file : REGION_DIRECTORY.listFiles()) {
+            if (!dominationRegionMap.containsKey(file.getName().replace(".yml", ""))) file.delete();
+        }
     }
 
     public void loadAll() {
@@ -52,12 +53,7 @@ public class DominationRegionStorage {
         YamlConfiguration ymlFile = YamlConfiguration.loadConfiguration(regionFile);
         ymlFile.set("name", dominationRegion.getName());
         ymlFile.set("center", dominationRegion.getCenter());
-        ymlFile.set("owner", Optional.ofNullable(dominationRegion.getOwner())
-                .map(Enum::name)
-                .orElse(null));
-        ymlFile.set("ownedTime", Optional.ofNullable(dominationRegion.getOwnedTime())
-                .map(Time::toString)
-                .orElse(null));
+        ymlFile.set("monsters", dominationRegion.getMonsterNames());
 
         try {
             ymlFile.save(regionFile);
@@ -70,13 +66,10 @@ public class DominationRegionStorage {
         YamlConfiguration ymlFile = YamlConfiguration.loadConfiguration(file);
         String name = ymlFile.getString("name");
         Location center = ymlFile.getLocation("center");
-        Group group = Optional.ofNullable(ymlFile.getString("owner"))
-                .map(Group::valueOf)
-                .orElse(null);
-        Time ownedTime = Optional.ofNullable(ymlFile.getString("ownedTime"))
-                .map(Time::valueOf)
-                .orElse(null);
-        DominationRegion dominationRegion = new DominationRegion(name, center, group, ownedTime);
+        BossBar bossBar = DominationRegionUtil.getInstance().getBossBar(name, null);
+        List<String> monsterNames = ymlFile.getStringList("monsters");
+
+        DominationRegion dominationRegion = new DominationRegion(name, center, null, null, bossBar, monsterNames);
         dominationRegionMap.put(name, dominationRegion);
     }
 

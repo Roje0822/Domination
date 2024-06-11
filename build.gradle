@@ -8,8 +8,10 @@ version '1.0.0'
 
 repositories {
     mavenCentral()
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    maven { url "https://maven.enginehub.org/repo/" }
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://maven.enginehub.org/repo/' }
+    maven { url 'https://mvn.lumine.io/repository/maven-public/' }
+    maven { url 'https://nexus.phoenixdevt.fr/repository/maven-public/'}
 }
 
 dependencies {
@@ -20,8 +22,11 @@ dependencies {
 
     //BUKKIT DEPENDENCIES
     compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
-    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.9'
-    compileOnly 'net.raidstone:WorldGuardEvents:1.18.1'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.9' // WorldGuard
+    compileOnly 'net.raidstone:WorldGuardEvents:1.18.1' // WorldGuardEvent
+    compileOnly 'io.lumine:Mythic-Dist:5.6.1' // MythicMob
+    compileOnly 'io.lumine:MythicLib-dist:1.6.2-SNAPSHOT' // MythicLib
+    compileOnly 'net.Indyuce:MMOCore-API:1.12.1-SNAPSHOT' // MMOCore
 }
 
 tasks.withType(JavaCompile).configureEach {

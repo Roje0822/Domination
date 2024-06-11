@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
+import org.bukkit.boss.BossBar;
 
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -14,5 +16,7 @@ public class DominationRegion {
     private String name;
     private Location center;
     private Group owner;
-    private Time ownedTime;
+    private LocalDateTime ownedTime;
+    private BossBar bossBar;
+    private List<String> monsterNames;
 }
